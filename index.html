@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lab Automation Payback</title>
+  <meta name="description" content="Estimate when automating a lab workflow step pays for itself.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="wrap">
+    <header class="intro">
+      <p class="eyebrow">Lab operations</p>
+      <h1>When does automating a lab step pay for itself?</h1>
+      <p class="lede">Enter your volume, how long the step takes by hand, and what the equipment costs. The calculator shows the payback time, what's driving it, and the volume where automation starts to make sense.</p>
+    </header>
+
+    <div class="layout">
+      <section class="panel inputs">
+        <div class="panel-head">
+          <h2>Inputs</h2>
+          <select id="preset" aria-label="Load a preset">
+            <option value="">Load a preset...</option>
+          </select>
+        </div>
+
+        <fieldset>
+          <legend>Volume</legend>
+          <label>Samples per day <input type="number" id="samples" min="0" step="1"></label>
+          <label>Working days per year <input type="number" id="days" min="0" step="1"></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Hands-on time per sample</legend>
+          <label>Manual (minutes) <input type="number" id="manualMin" min="0" step="0.5"></label>
+          <label>Automated (minutes) <input type="number" id="autoMin" min="0" step="0.5"></label>
+          <label>Loaded labor cost ($/hr) <input type="number" id="rate" min="0" step="1"></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Errors and reruns</legend>
+          <label>Manual rerun rate (%) <input type="number" id="manualErr" min="0" step="0.1"></label>
+          <label>Automated rerun rate (%) <input type="number" id="autoErr" min="0" step="0.1"></label>
+          <label>Cost per rerun ($) <input type="number" id="rerunCost" min="0" step="1"></label>
+        </fieldset>
+
+        <fieldset>
+          <legend>Equipment</legend>
+          <label>Upfront cost, installed and validated ($) <input type="number" id="capex" min="0" step="1000"></label>
+          <label>Service contract per year ($) <input type="number" id="service" min="0" step="500"></label>
+          <label>Extra consumables per sample ($) <input type="number" id="consumables" min="0" step="0.1"></label>
+        </fieldset>
+      </section>
+
+      <section class="outputs">
+        <div class="stats">
+          <div class="stat main">
+            <p class="stat-label">Payback</p>
+            <p class="stat-value" id="payback"></p>
+            <p class="stat-note" id="verdict"></p>
+          </div>
+          <div class="stat">
+            <p class="stat-label">Net savings per year</p>
+            <p class="stat-value" id="net"></p>
+          </div>
+          <div class="stat">
+            <p class="stat-label">Staff time freed</p>
+            <p class="stat-value" id="fte"></p>
+            <p class="stat-note" id="hours"></p>
+          </div>
+          <div class="stat">
+            <p class="stat-label">5-year net value</p>
+            <p class="stat-value" id="fiveYear"></p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>Cumulative cash over 5 years</h2>
+          <svg id="cashChart" viewBox="0 0 560 240" role="img" aria-label="Cumulative cash position over five years"></svg>
+        </div>
+
+        <div class="panel">
+          <h2>Where the savings come from</h2>
+          <div id="breakdown" class="breakdown"></div>
+        </div>
+
+        <div class="panel">
+          <h2>How volume changes the answer</h2>
+          <p class="hint" id="breakeven"></p>
+          <svg id="volChart" viewBox="0 0 560 240" role="img" aria-label="Payback months by daily sample volume"></svg>
+        </div>
+      </section>
+    </div>
+
+    <section class="panel method">
+      <h2>What this does and doesn't capture</h2>
+      <p>Savings come from less hands-on labor time and fewer reruns, minus the running costs (service and extra consumables). Payback is the upfront cost divided by monthly net savings.</p>
+      <p>It doesn't capture things that are often the real reason to automate: traceability, audit readiness, consistency between operators, and being able to grow volume without hiring. If payback looks borderline, those usually decide it. It also ignores validation downtime and the learning curve in the first months.</p>
+      <p class="fine">The presets use illustrative numbers, not data from any company.</p>
+    </section>
+
+    <footer class="footer">
+      <p>Built by <a href="https://cykim5.github.io">Claire Kim</a>.</p>
+    </footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
